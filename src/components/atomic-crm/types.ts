@@ -96,6 +96,7 @@ export type Contact = {
   gender: string;
   sales_id?: Identifier;
   status: string;
+  source?: string;
   background: string;
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
@@ -119,6 +120,7 @@ export type Deal = {
   stage: string;
   description: string;
   amount: number;
+  currency: string;
   created_at: string;
   updated_at: string;
   archived_at?: string;
@@ -215,7 +217,10 @@ export interface LabeledValue {
   label: string;
 }
 
-export type DealStage = LabeledValue;
+export interface DealStage extends LabeledValue {
+  color?: string;
+  probability?: number;
+}
 
 export interface NoteStatus extends LabeledValue {
   color: string;

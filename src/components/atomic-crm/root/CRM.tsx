@@ -143,28 +143,31 @@ export const CRM = ({
       return;
     }
     const img = new Image();
-    img.src = `https://atomic-crm-telemetry.marmelab.com/atomic-crm-telemetry?domain=${window.location.hostname}`;
+    img.src = `https://atomic-crm-telemetry.marmelab.com/atomic-crm-telemetry?domain=${window.location.hostname}&app=cosmos-crm`;
   }, [disableTelemetry]);
 
-  // Seed the store with CRM prop values if not already stored
-  // (backwards compatibility for prop-based config)
+  // Seed the store with CRM prop values, preserving any user-edited settings.
+  // Brand fields (title, logos) are always overwritten to reflect the current
+  // codebase defaults and survive localStorage from previous installs.
   useEffect(() => {
-    if (!store.getItem(CONFIGURATION_STORE_KEY)) {
-      store.setItem(CONFIGURATION_STORE_KEY, {
-        companySectors,
-        currency,
-        dealCategories,
-        dealPipelineStatuses,
-        dealStages,
-        noteStatuses,
-        taskTypes,
-        title,
-        darkModeLogo,
-        lightModeLogo,
-        googleWorkplaceDomain,
-        disableEmailPasswordAuthentication,
-      } satisfies ConfigurationContextValue);
-    }
+    const stored = store.getItem(CONFIGURATION_STORE_KEY);
+    store.setItem(CONFIGURATION_STORE_KEY, {
+      companySectors,
+      currency,
+      dealCategories,
+      dealPipelineStatuses,
+      dealStages,
+      noteStatuses,
+      taskTypes,
+      googleWorkplaceDomain,
+      disableEmailPasswordAuthentication,
+      // Restore any user-edited preferences on top of the defaults
+      ...stored,
+      // Brand config always reflects the current configured values
+      title,
+      darkModeLogo,
+      lightModeLogo,
+    } satisfies ConfigurationContextValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store]);
 

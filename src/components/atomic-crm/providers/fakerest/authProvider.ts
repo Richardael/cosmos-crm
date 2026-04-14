@@ -8,7 +8,7 @@ export const DEFAULT_USER = {
   id: 0,
   first_name: "Jane",
   last_name: "Doe",
-  email: "janedoe@atomic.dev",
+  email: "janedoe@cosmos.dev",
   password: "demo",
   administrator: true,
   avatar: {

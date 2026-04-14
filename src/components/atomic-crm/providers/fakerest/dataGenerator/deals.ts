@@ -2,6 +2,7 @@ import { add } from "date-fns";
 import { datatype, lorem, random } from "faker/locale/en_US";
 
 import {
+  dealCurrencies,
   defaultDealCategories,
   defaultDealStages,
 } from "../../../root/defaultConfiguration";
@@ -36,6 +37,7 @@ export const generateDeals = (db: Db): Deal[] => {
       stage: random.arrayElement(defaultDealStages).value,
       description: lorem.paragraphs(datatype.number({ min: 1, max: 4 })),
       amount: datatype.number(1000) * 100,
+      currency: random.arrayElement(dealCurrencies).value,
       created_at,
       updated_at: randomDate(new Date(created_at)).toISOString(),
       expected_closing_date,

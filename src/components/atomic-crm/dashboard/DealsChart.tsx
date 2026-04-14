@@ -8,11 +8,12 @@ import { findDealLabel } from "../deals/dealUtils";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Deal } from "../types";
 
-const multiplier = {
-  opportunity: 0.2,
-  "proposal-sent": 0.5,
-  "in-negociation": 0.8,
-  delayed: 0.3,
+const multiplier: Record<string, number> = {
+  prospecto: 0.1,
+  contactado: 0.25,
+  reunion: 0.4,
+  propuesta: 0.6,
+  negociacion: 0.75,
 };
 
 const threeMonthsAgo = new Date(
@@ -27,8 +28,9 @@ export const DealsChart = memo(() => {
   const acceptedLanguages = navigator
     ? navigator.languages || [navigator.language]
     : [DEFAULT_LOCALE];
-  const wonLabel = findDealLabel(dealStages, "won") ?? "Won";
-  const lostLabel = findDealLabel(dealStages, "lost") ?? "Lost";
+  const wonLabel = findDealLabel(dealStages, "cerrado_won") ?? "✅ Cerrado Won";
+  const lostLabel =
+    findDealLabel(dealStages, "cerrado_lost") ?? "❌ Cerrado Lost";
 
   const { data, isPending } = useGetList<Deal>("deals", {
     pagination: { perPage: 100, page: 1 },
@@ -55,20 +57,22 @@ export const DealsChart = memo(() => {
       return {
         date: format(month, "MMM"),
         won: dealsByMonth[month]
-          .filter((deal: Deal) => deal.stage === "won")
+          .filter((deal: Deal) => deal.stage === "cerrado_won")
           .reduce((acc: number, deal: Deal) => {
             acc += deal.amount;
             return acc;
           }, 0),
         pending: dealsByMonth[month]
-          .filter((deal: Deal) => !["won", "lost"].includes(deal.stage))
+          .filter(
+            (deal: Deal) =>
+              !["cerrado_won", "cerrado_lost"].includes(deal.stage),
+          )
           .reduce((acc: number, deal: Deal) => {
-            // @ts-expect-error - multiplier type issue
-            acc += deal.amount * multiplier[deal.stage];
+            acc += deal.amount * (multiplier[deal.stage] ?? 0);
             return acc;
           }, 0),
         lost: dealsByMonth[month]
-          .filter((deal: Deal) => deal.stage === "lost")
+          .filter((deal: Deal) => deal.stage === "cerrado_lost")
           .reduce((acc: number, deal: Deal) => {
             acc -= deal.amount;
             return acc;

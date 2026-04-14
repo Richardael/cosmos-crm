@@ -15,7 +15,7 @@ const singleNote = {
 };
 
 const meta = {
-  title: "Atomic CRM/Notes/NotesIteratorMobile",
+  title: "CosmosCRM/Notes/NotesIteratorMobile",
   parameters: {
     layout: "fullscreen",
   },

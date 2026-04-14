@@ -17,7 +17,9 @@ __screenshots__
 
 # misc
 .DS_Store
+.env
 .env.local
+.env.development
 .env.production
 .env.development.local
 .env.test.local
@@ -33,7 +35,6 @@ supabase/.temp
 
 dist/
 /lib/
-.env
 *storybook.log
 
 # Shadcn Registry

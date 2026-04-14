@@ -12,6 +12,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { contactOptionText } from "../misc/ContactOption";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { AutocompleteCompanyInput } from "../companies/AutocompleteCompanyInput.tsx";
+import { dealCurrencies } from "../root/defaultConfiguration";
 
 export const DealInputs = () => {
   const isMobile = useIsMobile();
@@ -73,32 +74,46 @@ const DealMiscInputs = () => {
       </h3>
 
       <SelectInput
+        source="stage"
+        choices={dealStages}
+        optionText="label"
+        optionValue="value"
+        defaultValue="prospecto"
+        helperText={false}
+        validate={required()}
+      />
+      <SelectInput
         source="category"
+        label="Tipo de Servicio"
         choices={dealCategories}
         optionText="label"
         optionValue="value"
         helperText={false}
       />
-      <NumberInput
-        source="amount"
-        defaultValue={0}
-        helperText={false}
-        validate={required()}
-      />
+      <div className="flex gap-2 items-end">
+        <NumberInput
+          source="amount"
+          defaultValue={0}
+          helperText={false}
+          validate={required()}
+          className="flex-1"
+        />
+        <SelectInput
+          source="currency"
+          label="Moneda"
+          choices={dealCurrencies}
+          optionText="label"
+          optionValue="value"
+          defaultValue="USD"
+          helperText={false}
+          className="w-36"
+        />
+      </div>
       <DateInput
         validate={required()}
         source="expected_closing_date"
         helperText={false}
         defaultValue={new Date().toISOString().split("T")[0]}
-      />
-      <SelectInput
-        source="stage"
-        choices={dealStages}
-        optionText="label"
-        optionValue="value"
-        defaultValue="opportunity"
-        helperText={false}
-        validate={required()}
       />
     </div>
   );

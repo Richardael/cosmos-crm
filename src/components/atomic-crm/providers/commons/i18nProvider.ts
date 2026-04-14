@@ -1,70 +1,34 @@
 import { mergeTranslations } from "ra-core";
 import polyglotI18nProvider from "ra-i18n-polyglot";
-import englishMessages from "ra-language-english";
-import frenchMessages from "ra-language-french";
+import spanishMessages from "@blackbox-vision/ra-language-spanish";
 import { raSupabaseEnglishMessages } from "ra-supabase-language-english";
-import { raSupabaseFrenchMessages } from "ra-supabase-language-french";
-import { englishCrmMessages } from "./englishCrmMessages";
-import { frenchCrmMessages } from "./frenchCrmMessages";
+import { spanishCrmMessages } from "./spanishCrmMessages";
 
-const raSupabaseEnglishMessagesOverride = {
-  "ra-supabase": {
-    auth: {
-      password_reset: "Check your emails for a Reset Password message.",
-    },
-  },
-};
-
-const raSupabaseFrenchMessagesOverride = {
-  "ra-supabase": {
-    auth: {
-      password_reset:
-        "Consultez vos emails pour trouver le message de reinitialisation du mot de passe.",
-    },
-  },
-};
-
-const englishCatalog = mergeTranslations(
-  englishMessages,
-  raSupabaseEnglishMessages,
-  raSupabaseEnglishMessagesOverride,
-  englishCrmMessages,
+// Build the Spanish catalog:
+// 1. Start with the base English catalog (needed for ra-supabase baseline)
+// 2. Layer Spanish base messages on top
+// 3. Layer Spanish supabase + CRM messages (includes supabase auth overrides)
+const spanishCatalog = mergeTranslations(
+  raSupabaseEnglishMessages, // baseline for ra-supabase keys
+  spanishMessages, // react-admin core in Spanish
+  spanishCrmMessages, // CRM strings + supabase auth in Spanish
 );
-
-const frenchCatalog = mergeTranslations(
-  englishCatalog,
-  frenchMessages,
-  raSupabaseFrenchMessages,
-  raSupabaseFrenchMessagesOverride,
-  frenchCrmMessages,
-);
-
-export const getInitialLocale = (): "en" | "fr" => {
-  if (typeof navigator === "undefined") {
-    return "en";
-  }
-
-  const browserLocale = navigator.languages?.[0] ?? navigator.language;
-  if (browserLocale?.toLowerCase().startsWith("fr")) {
-    return "fr";
-  }
-
-  return "en";
-};
 
 export const i18nProvider = polyglotI18nProvider(
-  (locale) => {
-    if (locale === "fr") {
-      return frenchCatalog;
-    }
-    return englishCatalog;
-  },
-  getInitialLocale(),
-  [
-    { locale: "en", name: "English" },
-    { locale: "fr", name: "Français" },
-  ],
+  () => spanishCatalog,
+  "es",
+  [{ locale: "es", name: "Español" }],
   { allowMissing: true },
+);
+
+// Used by tests — keeps English so test assertions don't break
+import englishMessages from "ra-language-english";
+import { englishCrmMessages } from "./englishCrmMessages";
+
+const englishCatalog = mergeTranslations(
+  raSupabaseEnglishMessages,
+  englishMessages,
+  englishCrmMessages,
 );
 
 export const testI18nProvider = polyglotI18nProvider(

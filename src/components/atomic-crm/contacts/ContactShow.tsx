@@ -10,7 +10,6 @@ import type { ShowBaseProps } from "ra-core";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { TextField } from "@/components/admin/text-field";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -30,7 +29,16 @@ import { ContactBackgroundInfo } from "./ContactBackgroundInfo";
 import { ContactTasksList } from "./ContactTasksList";
 import type { Contact } from "../types";
 import { Avatar } from "./Avatar";
-import { ContactAside } from "./ContactAside";
+import { ContactShowHeader } from "./ContactShowHeader";
+import { ContactQuickNotes } from "./ContactQuickNotes";
+import { ContactDeals } from "./ContactDeals";
+import { AsideSection } from "../misc/AsideSection";
+import { AddTask } from "../tasks/AddTask";
+import { TasksIterator } from "../tasks/TasksIterator";
+import { ReferenceManyField } from "@/components/admin/reference-many-field";
+import { ExportVCardButton } from "./ExportVCardButton";
+import { ContactMergeButton } from "./ContactMergeButton";
+import { DeleteButton } from "@/components/admin";
 import { MobileBackButton } from "../misc/MobileBackButton";
 
 export const ContactShow = (props: ShowBaseProps = {}) => {
@@ -241,62 +249,91 @@ const ContactShowContent = () => {
   if (isPending || !record) return null;
 
   return (
-    <div className="mt-2 mb-2 flex gap-8">
-      <div className="flex-1">
-        <Card>
-          <CardContent>
-            <div className="flex">
-              <Avatar />
-              <div className="ml-2 flex-1">
-                <h5 className="text-xl font-semibold">
-                  <RecordRepresentation />
-                </h5>
-                <div className="inline-flex text-sm text-muted-foreground">
-                  {record.title && record.company_id != null
-                    ? `${translate("resources.contacts.position_at", {
-                        title: record.title,
-                      })} `
-                    : record.title}
-                  {record.company_id != null && (
-                    <ReferenceField
-                      source="company_id"
-                      reference="companies"
-                      link="show"
-                    >
-                      &nbsp;
-                      <TextField source="name" />
-                    </ReferenceField>
-                  )}
-                </div>
-              </div>
-              <div>
-                <ReferenceField
-                  source="company_id"
-                  reference="companies"
-                  link="show"
-                  className="no-underline"
-                >
-                  <CompanyAvatar />
-                </ReferenceField>
-              </div>
-            </div>
-            <InfiniteListBase
-              resource="contact_notes"
-              filter={{ contact_id: record.id }}
-              sort={{ field: "date", order: "DESC" }}
-              perPage={25}
-              disableSyncWithLocation
-              storeKey={false}
-              empty={
-                <NoteCreate reference="contacts" showStatus className="mt-4" />
-              }
+    <div className="mt-2 mb-8 flex flex-col gap-6">
+      {/* Full-width header */}
+      <ContactShowHeader />
+
+      {/* 3-column grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr_280px] gap-6 items-start">
+        {/* Left column — info */}
+        <div className="flex flex-col gap-0">
+          <AsideSection title={translate("resources.notes.fields.status")}>
+            <ContactStatusSelector />
+          </AsideSection>
+
+          <AsideSection
+            title={translate(
+              "resources.contacts.field_categories.personal_info",
+            )}
+          >
+            <ContactPersonalInfo />
+          </AsideSection>
+
+          <AsideSection
+            title={translate(
+              "resources.contacts.field_categories.background_info",
+            )}
+          >
+            <ContactBackgroundInfo />
+          </AsideSection>
+
+          <AsideSection
+            title={translate("resources.tags.name", { smart_count: 2 })}
+          >
+            <TagsListEdit />
+          </AsideSection>
+
+          <AsideSection
+            title={translate("resources.tasks.name", { smart_count: 2 })}
+          >
+            <ReferenceManyField
+              target="contact_id"
+              reference="tasks"
+              sort={{ field: "due_date", order: "ASC" }}
+              perPage={1000}
             >
-              <NotesIterator reference="contacts" showStatus />
-            </InfiniteListBase>
-          </CardContent>
-        </Card>
+              <TasksIterator />
+            </ReferenceManyField>
+            <AddTask />
+          </AsideSection>
+
+          <div className="pt-4 border-t border-border flex flex-col gap-2 items-start">
+            <ExportVCardButton />
+            <ContactMergeButton />
+          </div>
+          <div className="mt-4 pt-4 border-t border-border flex flex-col gap-2 items-start">
+            <DeleteButton
+              className="h-6 cursor-pointer hover:bg-destructive/10! text-destructive! border-destructive! focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40"
+              size="sm"
+            />
+          </div>
+        </div>
+
+        {/* Center column — activity timeline */}
+        <div>
+          <InfiniteListBase
+            resource="contact_notes"
+            filter={{ contact_id: record.id }}
+            sort={{ field: "date", order: "DESC" }}
+            perPage={25}
+            disableSyncWithLocation
+            storeKey={false}
+            empty={
+              <NoteCreate reference="contacts" showStatus className="mt-4" />
+            }
+          >
+            <NotesIterator reference="contacts" showStatus />
+          </InfiniteListBase>
+        </div>
+
+        {/* Right column — deals + quick notes */}
+        <div className="flex flex-col gap-6">
+          <ContactDeals contactId={record.id} />
+          <div className="border-t border-border pt-4">
+            <ContactQuickNotes />
+          </div>
+        </div>
       </div>
-      <ContactAside />
     </div>
   );
 };

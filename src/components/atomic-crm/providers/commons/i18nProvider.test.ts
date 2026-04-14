@@ -1,65 +1,42 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { getInitialLocale, i18nProvider } from "./i18nProvider";
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
+import { describe, expect, it } from "vitest";
+import { i18nProvider } from "./i18nProvider";
 
 describe("i18nProvider", () => {
-  it("registers en and fr locales", () => {
+  it("registers only the es locale", () => {
     expect(i18nProvider.getLocales?.()).toEqual([
-      { locale: "en", name: "English" },
-      { locale: "fr", name: "Français" },
+      { locale: "es", name: "Español" },
     ]);
   });
 
-  it("translates the language key in french", async () => {
-    await i18nProvider.changeLocale("fr");
-
-    expect(i18nProvider.translate("crm.language")).toBe("Langue");
+  it("uses es as the default locale", () => {
+    expect(i18nProvider.getLocale()).toBe("es");
   });
 
-  it("falls back to english for unknown locales", async () => {
-    await i18nProvider.changeLocale("es");
-
-    expect(i18nProvider.translate("crm.language")).toBe("Language");
+  it("translates CRM keys to Spanish", () => {
+    expect(i18nProvider.translate("crm.language")).toBe("Idioma");
   });
 
-  it("uses customized password reset overrides for en and fr", async () => {
-    await i18nProvider.changeLocale("en");
-    expect(i18nProvider.translate("ra-supabase.auth.password_reset")).toBe(
-      "Check your emails for a Reset Password message.",
-    );
+  it("translates resource names to Spanish", () => {
+    expect(
+      i18nProvider.translate("resources.contacts.name", { smart_count: 2 }),
+    ).toBe("Contactos");
+  });
 
-    await i18nProvider.changeLocale("fr");
-    expect(i18nProvider.translate("ra-supabase.auth.password_reset")).toBe(
-      "Consultez vos emails pour trouver le message de reinitialisation du mot de passe.",
+  it("translates ra-supabase auth keys to Spanish", () => {
+    expect(i18nProvider.translate("ra-supabase.auth.forgot_password")).toBe(
+      "¿Olvidaste tu contraseña?",
     );
   });
 
-  it("translates recently added fr crm keys", async () => {
-    await i18nProvider.changeLocale("fr");
-
+  it("translates deal resource keys to Spanish", () => {
     expect(i18nProvider.translate("resources.deals.empty.title")).toBe(
-      "Aucune affaire trouvée",
+      "No se encontraron deals",
     );
   });
 
-  it("uses browser french locale when available", () => {
-    vi.stubGlobal("navigator", {
-      language: "fr-FR",
-      languages: ["fr-FR", "en-US"],
-    });
-
-    expect(getInitialLocale()).toBe("fr");
-  });
-
-  it("falls back to english when browser locale is unsupported", () => {
-    vi.stubGlobal("navigator", {
-      language: "es-ES",
-      languages: ["es-ES", "pt-BR"],
-    });
-
-    expect(getInitialLocale()).toBe("en");
+  it("translates ra core action keys to Spanish", () => {
+    expect(i18nProvider.translate("ra.action.save")).toBe("Guardar");
+    expect(i18nProvider.translate("ra.action.delete")).toBe("Eliminar");
+    expect(i18nProvider.translate("ra.action.cancel")).toBe("Cancelar");
   });
 });
