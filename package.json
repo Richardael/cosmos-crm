@@ -134,5 +134,9 @@
     "vite-plugin-simple-html": "^1.0.1",
     "vitest": "^4.0.18",
     "vitest-browser-react": "^2.0.5"
+  },
+  "overrides": {
+    "ra-core": "$ra-core"
   }
 }
+
