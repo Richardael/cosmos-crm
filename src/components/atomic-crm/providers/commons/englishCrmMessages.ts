@@ -308,6 +308,16 @@ export const englishCrmMessages = {
         new: "New user",
       },
     },
+    contact_statuses: {
+      name: "Contact status |||| Contact statuses",
+      fields: {
+        label: "Status name",
+        color: "Color",
+        icon: "Icon",
+        position: "Order",
+        is_default: "Default",
+      },
+    },
     tasks: {
       name: "Task |||| Tasks",
       forcedCaseName: "Task",
@@ -369,6 +379,10 @@ export const englishCrmMessages = {
   crm: {
     action: {
       reset_password: "Reset Password",
+    },
+    contacts: {
+      created_task_reminder:
+        "Contact created. Remember to create a task to follow up.",
     },
     auth: {
       first_name: "First name",

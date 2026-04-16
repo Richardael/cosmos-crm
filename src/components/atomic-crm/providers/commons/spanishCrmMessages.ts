@@ -37,7 +37,8 @@ const raCoreOverrides = {
       add_filter: "Agregar filtro",
       add: "Agregar",
       back: "Volver",
-      bulk_actions: "%{smart_count} elemento seleccionado |||| %{smart_count} elementos seleccionados",
+      bulk_actions:
+        "%{smart_count} elemento seleccionado |||| %{smart_count} elementos seleccionados",
       cancel: "Cancelar",
       clear_array_input: "Vaciar la lista",
       clear_input_value: "Borrar valor",
@@ -107,7 +108,8 @@ const raCoreOverrides = {
       details: "Detalles",
       error:
         "Se produjo un error en el cliente y tu solicitud no pudo completarse.",
-      invalid_form: "El formulario no es válido. Por favor corrije los errores.",
+      invalid_form:
+        "El formulario no es válido. Por favor corrije los errores.",
       loading: "La página está cargando, por favor espera un momento",
       no: "No",
       not_found:
@@ -150,7 +152,8 @@ const raCoreOverrides = {
       http_error: "Error de comunicación con el servidor",
       data_provider_error:
         "Error en el proveedor de datos. Revisa la consola para más detalles.",
-      i18n_error: "No se pudieron cargar las traducciones para el idioma especificado",
+      i18n_error:
+        "No se pudieron cargar las traducciones para el idioma especificado",
       canceled: "Acción cancelada",
       logged_out: "Tu sesión ha finalizado, por favor vuelve a conectarte.",
       not_authorized: "No tienes permiso para acceder a este recurso.",
@@ -171,7 +174,9 @@ const raCoreOverrides = {
   },
 };
 
-export const spanishCrmMessages: PartialCrmMessages & typeof raSupabaseSpanishMessages & typeof raCoreOverrides = {
+export const spanishCrmMessages: PartialCrmMessages &
+  typeof raSupabaseSpanishMessages &
+  typeof raCoreOverrides = {
   ...raSupabaseSpanishMessages,
   ...raCoreOverrides,
   resources: {
@@ -297,7 +302,8 @@ export const spanishCrmMessages: PartialCrmMessages & typeof raSupabaseSpanishMe
         running:
           "La importación está en curso, por favor no cierres esta pestaña.",
         sample_download: "Descargar CSV de muestra",
-        sample_hint: "Aquí tienes un archivo CSV de muestra que puedes usar como plantilla",
+        sample_hint:
+          "Aquí tienes un archivo CSV de muestra que puedes usar como plantilla",
         stop: "Detener importación",
         csv_file: "Archivo CSV",
         contacts_label: "contacto |||| contactos",
@@ -457,7 +463,8 @@ export const spanishCrmMessages: PartialCrmMessages & typeof raSupabaseSpanishMe
         attach_document: "Adjuntar documento",
       },
       validation: {
-        note_or_attachment_required: "Se requiere una nota o un archivo adjunto",
+        note_or_attachment_required:
+          "Se requiere una nota o un archivo adjunto",
       },
     },
     sales: {
@@ -483,6 +490,16 @@ export const spanishCrmMessages: PartialCrmMessages & typeof raSupabaseSpanishMe
       },
       action: {
         new: "Nuevo usuario",
+      },
+    },
+    contact_statuses: {
+      name: "Estado de contacto |||| Estados de contacto",
+      fields: {
+        label: "Nombre del estado",
+        color: "Color",
+        icon: "Ícono",
+        position: "Orden",
+        is_default: "Por defecto",
       },
     },
     tasks: {
@@ -546,6 +563,10 @@ export const spanishCrmMessages: PartialCrmMessages & typeof raSupabaseSpanishMe
   crm: {
     action: {
       reset_password: "Restablecer contraseña",
+    },
+    contacts: {
+      created_task_reminder:
+        "Contacto creado. Recuerda crear una tarea para darle seguimiento.",
     },
     auth: {
       first_name: "Nombre",

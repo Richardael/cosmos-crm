@@ -1,4 +1,12 @@
-import { CreateBase, Form, useGetIdentity, type MutationMode } from "ra-core";
+import {
+  CreateBase,
+  Form,
+  useGetIdentity,
+  useNotify,
+  useRedirect,
+  type MutationMode,
+  type RaRecord,
+} from "ra-core";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { ContactInputs } from "./ContactInputs";
@@ -15,12 +23,23 @@ export const ContactCreate = ({
   mutationMode?: MutationMode;
 }) => {
   const { identity } = useGetIdentity();
+  const notify = useNotify();
+  const redirect = useRedirect();
+
+  const handleSuccess = (data: RaRecord) => {
+    notify("crm.contacts.created_task_reminder", {
+      type: "info",
+      autoHideDuration: 7000,
+    });
+    redirect("show", "contacts", data.id);
+  };
 
   return (
     <CreateBase
-      redirect="show"
+      redirect={false}
       transform={cleanupContactForCreate}
       mutationMode={mutationMode}
+      mutationOptions={{ onSuccess: handleSuccess }}
     >
       <div className="mt-2 flex lg:mr-72">
         <div className="flex-1">

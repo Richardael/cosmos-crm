@@ -1,4 +1,4 @@
-import { Import, Settings, User, Users } from "lucide-react";
+import { Import, Layers, Settings, User, Users } from "lucide-react";
 import { CanAccess, useTranslate, useUserMenu } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
@@ -7,6 +7,8 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import { ImportPage } from "../misc/ImportPage";
+import { ContactStatusesPage } from "../contactStatuses/ContactStatusesPage";
+import { TasksHeaderButton } from "./TasksHeaderButton";
 
 const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
@@ -76,6 +78,7 @@ const Header = () => {
                     to="/deals"
                     isActive={currentPath === "/deals"}
                   />
+                  <TasksHeaderButton />
                 </nav>
               </div>
               <div className="flex items-center">
@@ -88,6 +91,7 @@ const Header = () => {
                   <CanAccess resource="configuration" action="edit">
                     <SettingsMenu />
                   </CanAccess>
+                  <ContactStatusesMenu />
                   <ImportFromJsonMenuItem />
                 </UserMenu>
               </div>
@@ -163,6 +167,21 @@ const SettingsMenu = () => {
       <Link to="/settings" className="flex items-center gap-2">
         <Settings />
         {translate("crm.settings.title")}
+      </Link>
+    </DropdownMenuItem>
+  );
+};
+
+const ContactStatusesMenu = () => {
+  const userMenuContext = useUserMenu();
+  if (!userMenuContext) {
+    throw new Error("<ContactStatusesMenu> must be used inside <UserMenu>");
+  }
+  return (
+    <DropdownMenuItem asChild onClick={userMenuContext.onClose}>
+      <Link to={ContactStatusesPage.path} className="flex items-center gap-2">
+        <Layers />
+        Estados de contacto
       </Link>
     </DropdownMenuItem>
   );

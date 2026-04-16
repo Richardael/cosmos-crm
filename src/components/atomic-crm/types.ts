@@ -101,6 +101,8 @@ export type Contact = {
   phone_jsonb: PhoneNumberAndType[];
   nb_tasks?: number;
   company_name?: string;
+  contact_status_id?: string | null;
+  contact_status?: ContactStatus;
 } & Pick<RaRecord, "id">;
 
 export type ContactNote = {
@@ -153,6 +155,16 @@ export type Task = {
   due_date: string;
   done_date?: string | null;
   sales_id?: Identifier;
+} & Pick<RaRecord, "id">;
+
+export type ContactStatus = {
+  tenant_id: string;
+  label: string;
+  color: string;
+  icon?: string;
+  position: number;
+  is_default: boolean;
+  created_at: string;
 } & Pick<RaRecord, "id">;
 
 export type ActivityCompanyCreated = {

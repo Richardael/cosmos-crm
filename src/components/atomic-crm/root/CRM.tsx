@@ -58,6 +58,8 @@ import { ContactListMobile } from "../contacts/ContactList.tsx";
 import { ContactShow } from "../contacts/ContactShow.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
+import { TasksPage } from "../tasks/TasksPage.tsx";
+import { ContactStatusesPage } from "../contactStatuses/ContactStatusesPage.tsx";
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -265,6 +267,11 @@ const DesktopAdmin = (
         <Route path={ProfilePage.path} element={<ProfilePage />} />
         <Route path={SettingsPage.path} element={<SettingsPage />} />
         <Route path={ImportPage.path} element={<ImportPage />} />
+        <Route path={TasksPage.path} element={<TasksPage />} />
+        <Route
+          path={ContactStatusesPage.path}
+          element={<ContactStatusesPage />}
+        />
       </CustomRoutes>
       <Resource name="deals" {...deals} />
       <Resource name="contacts" {...contacts} />
@@ -272,6 +279,7 @@ const DesktopAdmin = (
       <Resource name="contact_notes" />
       <Resource name="deal_notes" />
       <Resource name="tasks" />
+      <Resource name="contact_statuses" />
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
     </Admin>
