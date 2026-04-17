@@ -51,14 +51,12 @@ CREATE INDEX IF NOT EXISTS idx_contacts_status
   ON public.contacts(contact_status_id);
 
 -- 5. Índices para tasks (si no existen ya)
+-- NOTA: tasks no tiene tenant_id (instalación single-tenant)
 CREATE INDEX IF NOT EXISTS idx_tasks_due_date
   ON public.tasks(due_date) WHERE due_date IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_tasks_contact_id
   ON public.tasks(contact_id);
-
-CREATE INDEX IF NOT EXISTS idx_tasks_tenant_due
-  ON public.tasks(tenant_id, due_date);
 
 -- 6. Seed: estados por defecto para el tenant arcano-hub
 INSERT INTO public.contact_statuses (tenant_id, label, color, icon, position, is_default)
