@@ -112,6 +112,10 @@ Deno.serve(async (req: Request) => {
     // contact_ids es bigint[] en el schema
     const dealName = `${body.name} — ${body.services.slice(0, 2).join(", ")}`;
 
+    // expected_closing_date es TEXT con formato YYYY-MM-DD (ver schema-audit.md)
+    const closeDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const expectedClosingDate = `${closeDate.getFullYear()}-${String(closeDate.getMonth() + 1).padStart(2, "0")}-${String(closeDate.getDate()).padStart(2, "0")}`;
+
     const { data: deal, error: dealError } = await supabase
       .from("deals")
       .insert({
@@ -121,6 +125,7 @@ Deno.serve(async (req: Request) => {
         amount: budgetToAmount(body.budget),
         currency: "USD",
         description: body.description ?? null,
+        expected_closing_date: expectedClosingDate,
       })
       .select("id")
       .single();
@@ -186,13 +191,21 @@ function budgetToAmount(budget: string): number {
 }
 
 function buildNoteText(body: LeadPayload): string {
+  const now = new Date();
+  const proposalDeadline = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
+  const fmtVE = (d: Date) =>
+    d.toLocaleString("es-VE", { timeZone: "America/Caracas" });
+
   return [
     `📋 Lead capturado desde arcanohub.com`,
     `Servicios: ${body.services.join(", ")}`,
     `Presupuesto: ${body.budget}`,
     body.description ? `Descripción: ${body.description}` : null,
     body.source ? `Fuente: ${body.source}` : null,
-    `Fecha: ${new Date().toLocaleString("es-VE", { timeZone: "America/Caracas" })}`,
+    `──`,
+    `⏰ Propuesta prometida antes de: ${fmtVE(proposalDeadline)}`,
+    `📅 Cierre estimado: 30 días`,
+    `📍 Capturado: ${fmtVE(now)}`,
   ]
     .filter(Boolean)
     .join("\n");
