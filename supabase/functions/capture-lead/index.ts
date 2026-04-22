@@ -21,7 +21,8 @@ function corsHeaders(origin: string | null): Record<string, string> {
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface LeadPayload {
   name: string;
-  contactInfo: string; // email o número WhatsApp
+  contactInfo: string; // email (requerido)
+  phone?: string; // WhatsApp — opcional, para NeonBot
   services: string[];
   budget: string;
   description?: string;
@@ -58,6 +59,13 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    if (!body.contactInfo.includes("@")) {
+      return new Response(
+        JSON.stringify({ error: "contactInfo debe ser un email válido" }),
+        { status: 400, headers },
+      );
+    }
+
     if (!Array.isArray(body.services) || body.services.length === 0) {
       return new Response(
         JSON.stringify({ error: "services debe ser un array no vacío" }),
@@ -71,7 +79,6 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const isEmail = body.contactInfo.includes("@");
     const nameParts = body.name.trim().split(/\s+/);
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(" ") || null;
@@ -83,13 +90,11 @@ Deno.serve(async (req: Request) => {
       .insert({
         first_name: firstName,
         last_name: lastName,
-        email_jsonb: isEmail
-          ? [{ email: body.contactInfo.toLowerCase(), type: "Other" }]
+        email_jsonb: [{ email: body.contactInfo.toLowerCase(), type: "Work" }],
+        phone_jsonb: body.phone
+          ? [{ number: body.phone, type: "Mobile" }]
           : null,
-        phone_jsonb: !isEmail
-          ? [{ number: body.contactInfo, type: "Other" }]
-          : null,
-        source: isEmail ? "web" : "whatsapp",
+        source: "web",
         background: `Lead capturado desde arcanohub.com el ${new Date().toLocaleDateString("es-VE", { timeZone: "America/Caracas" })}`,
         first_seen: new Date().toISOString(),
         last_seen: new Date().toISOString(),
@@ -159,7 +164,6 @@ Deno.serve(async (req: Request) => {
         body,
         dealId: String(deal.id),
         crmUrl,
-        isEmail,
       });
     }
 
@@ -216,7 +220,6 @@ interface SendEmailsParams {
   body: LeadPayload;
   dealId: string;
   crmUrl: string;
-  isEmail: boolean;
 }
 
 async function sendEmails({
@@ -224,7 +227,6 @@ async function sendEmails({
   body,
   dealId,
   crmUrl,
-  isEmail,
 }: SendEmailsParams): Promise<void> {
   const resendHeaders = {
     Authorization: `Bearer ${resendApiKey}`,
@@ -256,8 +258,8 @@ async function sendEmails({
     }),
   });
 
-  // Email de confirmación al prospecto (solo si dejó email)
-  if (isEmail) {
+  // Email de confirmación al prospecto (contactInfo es siempre email ahora)
+  {
     const firstName = body.name.trim().split(/\s+/)[0];
     await fetch("https://api.resend.com/emails", {
       method: "POST",
