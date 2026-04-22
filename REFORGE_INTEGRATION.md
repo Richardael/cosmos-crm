@@ -388,9 +388,9 @@ def get_clients():
 
 ## Checklist de despliegue
 
-- [ ] Generar `REFORGE_API_KEY` segura: `openssl rand -hex 32`
-- [ ] `supabase secrets set REFORGE_API_KEY="..."`
-- [ ] `supabase functions deploy reforge --no-verify-jwt`
+- [x] Generar `REFORGE_API_KEY` segura: `openssl rand -hex 32`
+- [x] `supabase secrets set REFORGE_API_KEY="..."` — configurado en proyecto `omudzqdbilptqscmduzc`
+- [x] `supabase functions deploy reforge` — desplegado y activo
 - [ ] Verificar con `curl -H "X-Reforge-Key: ..." {URL}/summary`
 - [ ] Compartir `REFORGE_API_KEY` con el equipo de ReForge de forma segura (nunca por chat plano)
 - [ ] Agregar `REFORGE_API_KEY` al gestor de secretos de ReForge/Artoria

@@ -11,36 +11,18 @@ type LogoProps = {
 
 const Logo = ({ size = "md", className }: LogoProps) => {
   const px = sizes[size];
-  const fontSize = px * 0.3;
 
   return (
     <svg
       width={px}
       height={px}
-      viewBox="0 0 100 100"
+      viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="CosmosCRM"
+      aria-label="Neon CRM"
       className={className}
     >
-      {/* Hexagon */}
-      <polygon
-        points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5"
-        fill="#00C48E"
-      />
-      {/* Letters CC */}
-      <text
-        x="50"
-        y="50"
-        dominantBaseline="central"
-        textAnchor="middle"
-        fill="#1A1E29"
-        fontFamily="'DM Sans', 'Avenir Next', sans-serif"
-        fontWeight="700"
-        fontSize={fontSize}
-        letterSpacing="-1"
-      >
-        CC
-      </text>
+      <rect width="32" height="32" rx="6" fill="#0A0A0A" />
+      <path d="M14 4L7 18H13L9 28L23 14H16L19 4H14Z" fill="#F5C518" />
     </svg>
   );
 };

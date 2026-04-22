@@ -4,8 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "DM Sans", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bebas Neue", "Akira Expanded", ui-sans-serif, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "DM Sans", ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -41,57 +42,89 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* Arcano Hub brand colors */
-  --color-void: var(--void);
-  --color-deep: var(--deep);
-  --color-emerald: var(--emerald);
-  --color-ghost: var(--ghost);
-  --color-ghost-muted: var(--ghost-muted);
-  --color-surface: var(--surface);
+  /* Neon CRM brand colors */
+  --color-neon-void: var(--neon-void);
+  --color-neon-ink: var(--neon-ink);
+  --color-neon-surface: var(--neon-surface);
+  --color-neon-yellow: var(--neon-yellow);
+  --color-neon-yellow-hover: var(--neon-yellow-hover);
+  --color-neon-yellow-dim: var(--neon-yellow-dim);
+  --color-neon-white: var(--neon-white);
+  --color-neon-muted: var(--neon-muted);
 }
 
 :root {
-  /* Arcano Hub brand tokens */
-  --void: #1a1e29;
-  --deep: #132d48;
-  --emerald: #00c48e;
-  --ghost: #ebebeb;
-  --ghost-muted: #9ca3af;
-  --surface: #232837;
+  /* ─── Neon CRM — Design System ─── */
 
-  --radius: 0.625rem;
+  /* Backgrounds */
+  --neon-void: #0a0a0a;
+  --neon-ink: #111111;
+  --neon-surface: #1a1a1a;
+  --neon-overlay: #222222;
+  --neon-border: #2e2e2e;
+  --neon-border-strong: #3d3d3d;
+
+  /* Acento — Amarillo Neon */
+  --neon-yellow: #f5c518;
+  --neon-yellow-hover: #ffd60a;
+  --neon-yellow-dim: #c9a000;
+  --neon-yellow-ghost: rgba(245, 197, 24, 0.12);
+  --neon-yellow-glow: rgba(245, 197, 24, 0.25);
+
+  /* Textos */
+  --neon-white: #fafafa;
+  --neon-muted: #a0a0a0;
+  --neon-ghost: #606060;
+
+  /* Semánticos */
+  --neon-success: #22c55e;
+  --neon-warning: #f5a623;
+  --neon-error: #ef4444;
+  --neon-info: #3b82f6;
+
+  /* Pipeline stages */
+  --stage-prospecto: #4b5563;
+  --stage-contactado: #3b82f6;
+  --stage-reunion: #8b5cf6;
+  --stage-propuesta: #f59e0b;
+  --stage-negociacion: #f97316;
+  --stage-won: #22c55e;
+  --stage-lost: #ef4444;
+
+  --radius: 0.5rem;
+
   /* Shadcn semantic tokens — dark mode only */
-  --background: #1a1e29;
-  --foreground: #ebebeb;
-  --card: #232837;
-  --card-foreground: #ebebeb;
-  --popover: #232837;
-  --popover-foreground: #ebebeb;
-  --primary: #00c48e;
-  --primary-foreground: #1a1e29;
-  --secondary: #132d48;
-  --secondary-foreground: #ebebeb;
-  --muted: #132d48;
-  --muted-foreground: #9ca3af;
-  --accent: #232837;
-  --accent-foreground: #ebebeb;
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: #2e3547;
-  --input: #2e3547;
-  --ring: #00c48e;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.488 0.243 264.376);
-  --sidebar: #1a1e29;
-  --sidebar-foreground: #ebebeb;
-  --sidebar-primary: #00c48e;
-  --sidebar-primary-foreground: #1a1e29;
-  --sidebar-accent: #232837;
-  --sidebar-accent-foreground: #ebebeb;
-  --sidebar-border: #2e3547;
-  --sidebar-ring: #00c48e;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #111111;
+  --card-foreground: #fafafa;
+  --popover: #1a1a1a;
+  --popover-foreground: #fafafa;
+  --primary: #f5c518;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #fafafa;
+  --muted: #1a1a1a;
+  --muted-foreground: #a0a0a0;
+  --accent: #222222;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #2e2e2e;
+  --input: #2e2e2e;
+  --ring: #f5c518;
+  --chart-1: #f5c518;
+  --chart-2: #22c55e;
+  --chart-3: #3b82f6;
+  --chart-4: #8b5cf6;
+  --chart-5: #f97316;
+  --sidebar: #111111;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #f5c518;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #222222;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #2e2e2e;
+  --sidebar-ring: #f5c518;
   --avatar-0: oklch(0.35 0.12 240);
   --avatar-1: oklch(0.38 0.14 340);
   --avatar-2: oklch(0.35 0.11 180);
@@ -106,37 +139,37 @@
 
 /* Dark-only: .dark mirrors :root — ThemeProvider always adds this class */
 .dark {
-  --background: #1a1e29;
-  --foreground: #ebebeb;
-  --card: #232837;
-  --card-foreground: #ebebeb;
-  --popover: #232837;
-  --popover-foreground: #ebebeb;
-  --primary: #00c48e;
-  --primary-foreground: #1a1e29;
-  --secondary: #132d48;
-  --secondary-foreground: #ebebeb;
-  --muted: #132d48;
-  --muted-foreground: #9ca3af;
-  --accent: #232837;
-  --accent-foreground: #ebebeb;
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: #2e3547;
-  --input: #2e3547;
-  --ring: #00c48e;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.488 0.243 264.376);
-  --sidebar: #1a1e29;
-  --sidebar-foreground: #ebebeb;
-  --sidebar-primary: #00c48e;
-  --sidebar-primary-foreground: #1a1e29;
-  --sidebar-accent: #232837;
-  --sidebar-accent-foreground: #ebebeb;
-  --sidebar-border: #2e3547;
-  --sidebar-ring: #00c48e;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #111111;
+  --card-foreground: #fafafa;
+  --popover: #1a1a1a;
+  --popover-foreground: #fafafa;
+  --primary: #f5c518;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #fafafa;
+  --muted: #1a1a1a;
+  --muted-foreground: #a0a0a0;
+  --accent: #222222;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #2e2e2e;
+  --input: #2e2e2e;
+  --ring: #f5c518;
+  --chart-1: #f5c518;
+  --chart-2: #22c55e;
+  --chart-3: #3b82f6;
+  --chart-4: #8b5cf6;
+  --chart-5: #f97316;
+  --sidebar: #111111;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #f5c518;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #222222;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #2e2e2e;
+  --sidebar-ring: #f5c518;
   --avatar-0: oklch(0.35 0.12 240);
   --avatar-1: oklch(0.38 0.14 340);
   --avatar-2: oklch(0.35 0.11 180);
@@ -201,5 +234,203 @@ input[type="time"] {
 }
 
 body {
-  font-family: "DM Sans", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Neon CRM — Global UI Polish ─────────────────────────────────────────── */
+
+/* MUI DataGrid / react-admin List overrides */
+.RaList-main .MuiPaper-root,
+.RaDatagrid-root {
+  background-color: var(--neon-ink) !important;
+  border: 1px solid var(--neon-border) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: none !important;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  background-color: var(--neon-ink) !important;
+  color: var(--neon-muted) !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--neon-border) !important;
+}
+
+.MuiTableBody-root .MuiTableRow-root {
+  border-bottom: 1px solid var(--neon-border) !important;
+  transition: background-color 0.15s ease;
+}
+
+.MuiTableBody-root .MuiTableRow-root:hover {
+  background-color: var(--neon-surface) !important;
+}
+
+.MuiTableBody-root .MuiTableCell-root {
+  background-color: transparent !important;
+  color: var(--neon-white) !important;
+  border-bottom: none !important;
+  font-size: 0.875rem !important;
+}
+
+/* react-admin toolbar / filter bar */
+.RaFilterForm-root,
+.RaTopToolbar-root {
+  background: transparent !important;
+}
+
+/* MUI TextField / Input — dark Neon style */
+.MuiOutlinedInput-root {
+  background-color: var(--neon-surface) !important;
+  border-radius: 0.375rem !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--neon-border) !important;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--neon-border-strong) !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--neon-yellow) !important;
+  border-width: 1px !important;
+}
+
+.MuiInputBase-input,
+.MuiSelect-select {
+  color: var(--neon-white) !important;
+  font-size: 0.875rem !important;
+}
+
+.MuiInputLabel-root {
+  color: var(--neon-muted) !important;
+  font-size: 0.875rem !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: var(--neon-yellow) !important;
+}
+
+/* MUI Button overrides */
+.MuiButton-containedPrimary {
+  background-color: var(--neon-yellow) !important;
+  color: var(--neon-void) !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.MuiButton-containedPrimary:hover {
+  background-color: var(--neon-yellow-hover) !important;
+  box-shadow: 0 0 12px var(--neon-yellow-glow) !important;
+}
+
+.MuiButton-outlinedPrimary {
+  border-color: var(--neon-yellow) !important;
+  color: var(--neon-yellow) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.MuiButton-textPrimary,
+.MuiButton-text {
+  color: var(--neon-muted) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.MuiButton-textPrimary:hover,
+.MuiButton-text:hover {
+  color: var(--neon-white) !important;
+  background-color: var(--neon-surface) !important;
+}
+
+/* Chips — pipeline stage colors */
+.MuiChip-root[data-stage="prospecto"] {
+  background-color: var(--stage-prospecto) !important;
+  color: #fff !important;
+}
+.MuiChip-root[data-stage="contactado"] {
+  background-color: var(--stage-contactado) !important;
+  color: #fff !important;
+}
+.MuiChip-root[data-stage="reunion"] {
+  background-color: var(--stage-reunion) !important;
+  color: #fff !important;
+}
+.MuiChip-root[data-stage="propuesta"] {
+  background-color: var(--stage-propuesta) !important;
+  color: #0a0a0a !important;
+}
+.MuiChip-root[data-stage="negociacion"] {
+  background-color: var(--stage-negociacion) !important;
+  color: #fff !important;
+}
+.MuiChip-root[data-stage="cerrado_won"] {
+  background-color: var(--stage-won) !important;
+  color: #fff !important;
+}
+.MuiChip-root[data-stage="cerrado_lost"] {
+  background-color: var(--stage-lost) !important;
+  color: #fff !important;
+}
+
+/* MUI Dialog / Modal */
+.MuiDialog-paper {
+  background-color: var(--neon-ink) !important;
+  border: 1px solid var(--neon-border) !important;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* MUI Menu (dropdowns) */
+.MuiMenu-paper,
+.MuiPopover-paper {
+  background-color: var(--neon-overlay) !important;
+  border: 1px solid var(--neon-border) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.MuiMenuItem-root {
+  color: var(--neon-white) !important;
+  font-size: 0.875rem !important;
+}
+
+.MuiMenuItem-root:hover,
+.MuiMenuItem-root.Mui-selected {
+  background-color: var(--neon-surface) !important;
+}
+
+/* MUI Pagination */
+.MuiPaginationItem-root {
+  color: var(--neon-muted) !important;
+  border-color: var(--neon-border) !important;
+}
+
+.MuiPaginationItem-root.Mui-selected {
+  background-color: var(--neon-yellow) !important;
+  color: var(--neon-void) !important;
+  border-color: var(--neon-yellow) !important;
+}
+
+/* Sidebar group label */
+[data-slot="sidebar-group-label"] {
+  color: var(--neon-ghost) !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+/* Sidebar active item — yellow accent */
+[data-slot="sidebar-menu-button"][data-active="true"] {
+  background-color: var(--neon-yellow-ghost) !important;
+  color: var(--neon-yellow) !important;
+}
+
+[data-slot="sidebar-menu-button"][data-active="true"] svg {
+  color: var(--neon-yellow) !important;
 }

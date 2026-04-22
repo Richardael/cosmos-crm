@@ -1,6 +1,6 @@
 {
-  "name": "cosmos-crm",
-  "description": "CosmosCRM — CRM moderno para Arcano Hub",
+  "name": "neon-crm",
+  "description": "Neon CRM — CRM moderno para Arcano Hub",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -139,4 +139,3 @@
     "ra-core": "$ra-core"
   }
 }
-

@@ -257,7 +257,7 @@ async function executeQueryWithRLS(
 
 function createMcpServer(authInfo: AuthInfo): McpServer {
   const server = new McpServer({
-    name: "atomic-crm",
+    name: "neon-crm",
     version: "1.0.0",
   });
 
