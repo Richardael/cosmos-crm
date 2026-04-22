@@ -61,11 +61,14 @@ Deno.serve(async (req: Request) => {
   const EVOLUTION_API_KEY = Deno.env.get("EVOLUTION_API_KEY")!;
 
   async function sendToKevin(text: string): Promise<boolean> {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 8_000);
     try {
       const res = await fetch(
         `${EVOLUTION_URL}/message/sendText/${EVOLUTION_INSTANCE}`,
         {
           method: "POST",
+          signal: controller.signal,
           headers: {
             "Content-Type": "application/json",
             apikey: EVOLUTION_API_KEY,
@@ -73,16 +76,23 @@ Deno.serve(async (req: Request) => {
           body: JSON.stringify({ number: senderNumber, text }),
         },
       );
-      await supabase.from("whatsapp_messages").insert({
-        direction: "outbound",
-        message_type: "kevin_reply",
-        phone_number: KEVIN_PHONE,
-        message_text: text,
-        status: res.ok ? "sent" : "failed",
-      });
+      await supabase
+        .from("whatsapp_messages")
+        .insert({
+          direction: "outbound",
+          message_type: "kevin_reply",
+          phone_number: KEVIN_PHONE,
+          message_text: text,
+          status: res.ok ? "sent" : "failed",
+        })
+        .catch(() => {});
       return res.ok;
     } catch (err) {
-      console.error("sendToKevin error:", err);
+      const isTimeout = err instanceof Error && err.name === "AbortError";
+      console.error(
+        isTimeout ? "sendToKevin timeout (8s)" : "sendToKevin error:",
+        err,
+      );
       return false;
     }
   }

@@ -31,7 +31,6 @@ Deno.serve(async (_req: Request) => {
   for (const lead of leads) {
     const dayType = lead.days_since_created as 1 | 3 | 7;
 
-    // Deduplicar: solo una notificación por (deal, día)
     const { data: existing } = await supabase
       .from("kevin_notifications")
       .select("id")
@@ -41,36 +40,20 @@ Deno.serve(async (_req: Request) => {
     if (existing) continue;
 
     const msgText = buildKevinReminder(lead, dayType);
-    const cleanNum = KEVIN_PHONE.replace(/[\s+\-()]/g, "");
+    const {
+      ok,
+      messageId,
+      error: sendError,
+    } = await sendToEvolution(
+      EVOLUTION_URL,
+      EVOLUTION_INSTANCE,
+      EVOLUTION_API_KEY,
+      KEVIN_PHONE,
+      msgText,
+    );
 
-    let evolutionMsgId: string | null = null;
-    let status: "sent" | "failed" = "failed";
+    if (sendError) console.error("Evolution send error:", sendError);
 
-    try {
-      const res = await fetch(
-        `${EVOLUTION_URL}/message/sendText/${EVOLUTION_INSTANCE}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: EVOLUTION_API_KEY,
-          },
-          body: JSON.stringify({ number: cleanNum, text: msgText }),
-        },
-      );
-      if (res.ok) {
-        const body = await res.json();
-        evolutionMsgId = body?.key?.id ?? null;
-        status = "sent";
-        sent++;
-      } else {
-        console.error("Evolution error:", res.status, await res.text());
-      }
-    } catch (err) {
-      console.error("Evolution fetch error:", err);
-    }
-
-    // Log en whatsapp_messages
     await supabase.from("whatsapp_messages").insert({
       contact_id: lead.contact_id,
       deal_id: lead.deal_id,
@@ -78,12 +61,12 @@ Deno.serve(async (_req: Request) => {
       message_type: `scheduler_d${dayType}`,
       phone_number: KEVIN_PHONE,
       message_text: msgText,
-      status,
-      evolution_message_id: evolutionMsgId,
+      status: ok ? "sent" : "failed",
+      evolution_message_id: messageId,
     });
 
-    // Registrar deduplicación solo si se envió correctamente
-    if (status === "sent") {
+    if (ok) {
+      sent++;
       await supabase
         .from("kevin_notifications")
         .insert({ deal_id: lead.deal_id, day_type: dayType });
@@ -94,6 +77,48 @@ Deno.serve(async (_req: Request) => {
     status: 200,
   });
 });
+
+async function sendToEvolution(
+  url: string,
+  instance: string,
+  apiKey: string,
+  phone: string,
+  text: string,
+): Promise<{ ok: boolean; messageId: string | null; error: string | null }> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8_000);
+  const cleanPhone = phone.replace(/[\s+\-()]/g, "");
+
+  try {
+    const res = await fetch(`${url}/message/sendText/${instance}`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: { "Content-Type": "application/json", apikey: apiKey },
+      body: JSON.stringify({ number: cleanPhone, text }),
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      return {
+        ok: false,
+        messageId: null,
+        error: `HTTP ${res.status}: ${body}`,
+      };
+    }
+
+    const data = await res.json().catch(() => ({}));
+    return { ok: true, messageId: data?.key?.id ?? null, error: null };
+  } catch (err: unknown) {
+    clearTimeout(timeoutId);
+    const isTimeout = err instanceof Error && err.name === "AbortError";
+    return {
+      ok: false,
+      messageId: null,
+      error: isTimeout ? "Evolution API timeout (8s)" : String(err),
+    };
+  }
+}
 
 // ─── Mensaje para Kevin ───────────────────────────────────────────────────────
 
