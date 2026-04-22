@@ -19,33 +19,43 @@ export const DealColumn = ({
   const stageColor = stageConfig?.color ?? "#4b5563";
 
   return (
-    <div className="flex-1 pb-8 min-w-50">
-      {/* Colored top accent bar */}
+    <div className="flex-1 pb-8 min-w-52 flex flex-col">
+      {/* Column header card with strong color identity */}
       <div
-        className="h-0.5 w-full rounded-full mb-3"
-        style={{ backgroundColor: stageColor }}
-      />
-
-      <div className="flex flex-col items-center mb-2">
-        <div className="flex items-center gap-1.5 mb-0.5">
+        className="rounded-lg mb-3 px-3 py-2.5"
+        style={{
+          background: `linear-gradient(135deg, ${stageColor}18 0%, ${stageColor}08 100%)`,
+          border: `1px solid ${stageColor}40`,
+          borderTop: `3px solid ${stageColor}`,
+        }}
+      >
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-2">
+            <span
+              className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
+              style={{
+                backgroundColor: stageColor,
+                boxShadow: `0 0 6px ${stageColor}80`,
+              }}
+            />
+            <h3
+              className="text-sm font-bold tracking-tight"
+              style={{ color: stageColor }}
+            >
+              {findDealLabel(dealStages, stage)}
+            </h3>
+          </div>
           <span
-            className="inline-block w-2 h-2 rounded-full shrink-0"
-            style={{ backgroundColor: stageColor }}
-          />
-          <h3 className="text-sm font-semibold tracking-tight">
-            {findDealLabel(dealStages, stage)}
-          </h3>
-          <span
-            className="text-xs font-mono font-bold px-1.5 py-0.5 rounded"
+            className="text-xs font-mono font-bold w-5 h-5 flex items-center justify-center rounded-full shrink-0"
             style={{
-              backgroundColor: `${stageColor}22`,
-              color: stageColor,
+              backgroundColor: stageColor,
+              color: "#0a0a0a",
             }}
           >
             {deals.length}
           </span>
         </div>
-        <p className="text-xs text-muted-foreground font-mono">
+        <p className="text-xs font-mono" style={{ color: `${stageColor}99` }}>
           {totalAmount.toLocaleString("en-US", {
             notation: "compact",
             style: "currency",
@@ -61,11 +71,15 @@ export const DealColumn = ({
           <div
             ref={droppableProvided.innerRef}
             {...droppableProvided.droppableProps}
-            className={`flex flex-col rounded-xl mt-1 gap-2 min-h-12 p-1 transition-colors ${
+            className="flex flex-col gap-2 flex-1 rounded-lg p-1.5 min-h-16 transition-all"
+            style={
               snapshot.isDraggingOver
-                ? "bg-muted/60 ring-1 ring-border"
-                : "bg-transparent"
-            }`}
+                ? {
+                    backgroundColor: `${stageColor}10`,
+                    outline: `1px dashed ${stageColor}50`,
+                  }
+                : {}
+            }
           >
             {deals.map((deal, index) => (
               <DealCard key={deal.id} deal={deal} index={index} />
