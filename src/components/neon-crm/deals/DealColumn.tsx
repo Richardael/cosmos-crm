@@ -5,6 +5,21 @@ import type { Deal } from "../types";
 import { findDealLabel } from "./dealUtils";
 import { DealCard } from "./DealCard";
 
+// Palette applied by column index when a stage has no color property.
+// Covers up to 10 stages; wraps beyond that.
+const INDEX_COLORS = [
+  "#9CA3AF", // gray
+  "#60A5FA", // blue
+  "#A78BFA", // purple
+  "#FCD34D", // amber
+  "#FB923C", // orange
+  "#22c55e", // green
+  "#EF4444", // red
+  "#f472b6", // pink
+  "#34d399", // emerald
+  "#facc15", // yellow
+];
+
 export const DealColumn = ({
   stage,
   deals,
@@ -15,18 +30,23 @@ export const DealColumn = ({
   const totalAmount = deals.reduce((sum, deal) => sum + deal.amount, 0);
   const { dealStages, currency } = useConfigurationContext();
 
-  const stageConfig = dealStages.find((s) => s.value === stage);
-  const stageColor = stageConfig?.color ?? "#4b5563";
+  const stageIndex = dealStages.findIndex((s) => s.value === stage);
+  const stageConfig = dealStages[stageIndex];
+  // Use the stored color; fall back to the index-based palette so every column is distinct.
+  const stageColor =
+    stageConfig?.color ??
+    INDEX_COLORS[stageIndex >= 0 ? stageIndex % INDEX_COLORS.length : 0];
 
   return (
     <div className="flex-1 pb-8 min-w-52 flex flex-col">
-      {/* Column header card with strong color identity */}
+      {/* Column header card */}
       <div
         className="rounded-lg mb-3 px-3 py-2.5"
         style={{
-          background: `linear-gradient(135deg, ${stageColor}18 0%, ${stageColor}08 100%)`,
-          border: `1px solid ${stageColor}40`,
+          background: `linear-gradient(135deg, ${stageColor}25 0%, ${stageColor}0d 100%)`,
           borderTop: `3px solid ${stageColor}`,
+          border: `1px solid ${stageColor}50`,
+          borderTopWidth: "3px",
         }}
       >
         <div className="flex items-center justify-between mb-1">
@@ -35,27 +55,21 @@ export const DealColumn = ({
               className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
               style={{
                 backgroundColor: stageColor,
-                boxShadow: `0 0 6px ${stageColor}80`,
+                boxShadow: `0 0 8px ${stageColor}`,
               }}
             />
-            <h3
-              className="text-sm font-bold tracking-tight"
-              style={{ color: stageColor }}
-            >
+            <h3 className="text-sm font-bold" style={{ color: stageColor }}>
               {findDealLabel(dealStages, stage)}
             </h3>
           </div>
           <span
             className="text-xs font-mono font-bold w-5 h-5 flex items-center justify-center rounded-full shrink-0"
-            style={{
-              backgroundColor: stageColor,
-              color: "#0a0a0a",
-            }}
+            style={{ backgroundColor: stageColor, color: "#0a0a0a" }}
           >
             {deals.length}
           </span>
         </div>
-        <p className="text-xs font-mono" style={{ color: `${stageColor}99` }}>
+        <p className="text-xs font-mono" style={{ color: `${stageColor}bb` }}>
           {totalAmount.toLocaleString("en-US", {
             notation: "compact",
             style: "currency",
@@ -75,8 +89,8 @@ export const DealColumn = ({
             style={
               snapshot.isDraggingOver
                 ? {
-                    backgroundColor: `${stageColor}10`,
-                    outline: `1px dashed ${stageColor}50`,
+                    backgroundColor: `${stageColor}12`,
+                    outline: `1.5px dashed ${stageColor}60`,
                   }
                 : {}
             }
