@@ -60,6 +60,7 @@ import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 import { TasksPage } from "../tasks/TasksPage.tsx";
 import { ContactStatusesPage } from "../contactStatuses/ContactStatusesPage.tsx";
+import { WhatsappMessageList } from "../neonbot/WhatsappMessageList.tsx";
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -282,6 +283,11 @@ const DesktopAdmin = (
       <Resource name="contact_statuses" />
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
+      <Resource
+        name="whatsapp_messages"
+        list={WhatsappMessageList}
+        options={{ label: "NeonBot" }}
+      />
     </Admin>
   );
 };

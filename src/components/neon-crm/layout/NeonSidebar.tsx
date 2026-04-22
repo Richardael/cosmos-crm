@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   ListTodo,
   LogOut,
+  MessageSquare,
   Settings,
   Users,
   Zap,
@@ -117,6 +118,12 @@ export const NeonSidebar = () => {
           <SidebarGroupLabel>Sistema</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              <NavItem
+                to="/whatsapp_messages"
+                icon={MessageSquare}
+                label="NeonBot"
+                onClick={handleClick}
+              />
               <NavItem
                 to={ContactStatusesPage.path}
                 icon={CircleDot}
