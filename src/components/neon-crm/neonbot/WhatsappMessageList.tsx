@@ -1,11 +1,8 @@
-import {
-  Datagrid,
-  DateField,
-  FunctionField,
-  List,
-  TextField,
-  useRecordContext,
-} from "react-admin";
+import { useRecordContext } from "ra-core";
+import { List } from "@/components/admin/list";
+import { DataTable } from "@/components/admin/data-table";
+import { DateField } from "@/components/admin/date-field";
+import { TextField } from "@/components/admin/text-field";
 
 const MessageTypeBadge = () => {
   const record = useRecordContext();
@@ -125,43 +122,54 @@ export const WhatsappMessageList = () => (
     perPage={25}
     title="NeonBot"
   >
-    <Datagrid bulkActionButtons={false} rowClick={false}>
-      <FunctionField label="Tipo" render={() => <MessageTypeBadge />} />
-      <FunctionField label="Dir." render={() => <DirectionBadge />} />
-      <TextField
-        label="Teléfono"
-        source="phone_number"
-        sx={{
-          fontFamily: "JetBrains Mono",
-          fontSize: "12px",
-          color: "#A0A0A0",
-        }}
-      />
-      <TextField
-        label="Mensaje"
-        source="message_text"
-        sx={{
-          maxWidth: "320px",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-          fontSize: "13px",
-          display: "block",
-        }}
-      />
-      <FunctionField label="Stage" render={() => <StageChange />} />
-      <FunctionField label="Estado" render={() => <StatusBadge />} />
-      <DateField
-        label="Fecha"
-        source="created_at"
-        showTime
-        sx={{
-          fontFamily: "JetBrains Mono",
-          fontSize: "12px",
-          color: "#606060",
-          whiteSpace: "nowrap",
-        }}
-      />
-    </Datagrid>
+    <DataTable bulkActionButtons={false} rowClick={false}>
+      <DataTable.Col label="Tipo" disableSort>
+        <MessageTypeBadge />
+      </DataTable.Col>
+      <DataTable.Col label="Dir." disableSort>
+        <DirectionBadge />
+      </DataTable.Col>
+      <DataTable.Col source="phone_number" label="Teléfono">
+        <TextField
+          source="phone_number"
+          sx={{
+            fontFamily: "JetBrains Mono",
+            fontSize: "12px",
+            color: "#A0A0A0",
+          }}
+        />
+      </DataTable.Col>
+      <DataTable.Col source="message_text" label="Mensaje">
+        <TextField
+          source="message_text"
+          sx={{
+            maxWidth: "320px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            fontSize: "13px",
+            display: "block",
+          }}
+        />
+      </DataTable.Col>
+      <DataTable.Col label="Stage" disableSort>
+        <StageChange />
+      </DataTable.Col>
+      <DataTable.Col label="Estado" disableSort>
+        <StatusBadge />
+      </DataTable.Col>
+      <DataTable.Col source="created_at" label="Fecha">
+        <DateField
+          source="created_at"
+          showTime
+          sx={{
+            fontFamily: "JetBrains Mono",
+            fontSize: "12px",
+            color: "#606060",
+            whiteSpace: "nowrap",
+          }}
+        />
+      </DataTable.Col>
+    </DataTable>
   </List>
 );
