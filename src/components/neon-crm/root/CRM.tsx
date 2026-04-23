@@ -61,6 +61,7 @@ import { NoteShowPage } from "../notes/NoteShowPage.tsx";
 import { TasksPage } from "../tasks/TasksPage.tsx";
 import { ContactStatusesPage } from "../contactStatuses/ContactStatusesPage.tsx";
 import { WhatsappMessageList } from "../neonbot/WhatsappMessageList.tsx";
+import { WhatsAppSettings } from "../settings/WhatsAppSettings.tsx";
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -273,6 +274,7 @@ const DesktopAdmin = (
           path={ContactStatusesPage.path}
           element={<ContactStatusesPage />}
         />
+        <Route path="/whatsapp_settings" element={<WhatsAppSettings />} />
       </CustomRoutes>
       <Resource name="deals" {...deals} />
       <Resource name="contacts" {...contacts} />

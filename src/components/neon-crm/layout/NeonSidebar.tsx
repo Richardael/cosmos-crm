@@ -9,6 +9,7 @@ import {
   LogOut,
   MessageSquare,
   Settings,
+  Smartphone,
   Users,
   Zap,
 } from "lucide-react";
@@ -122,6 +123,12 @@ export const NeonSidebar = () => {
                 to="/whatsapp_messages"
                 icon={MessageSquare}
                 label="NeonBot"
+                onClick={handleClick}
+              />
+              <NavItem
+                to="/whatsapp_settings"
+                icon={Smartphone}
+                label="WhatsApp"
                 onClick={handleClick}
               />
               <NavItem
